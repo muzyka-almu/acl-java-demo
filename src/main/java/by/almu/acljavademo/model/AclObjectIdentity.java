@@ -19,7 +19,7 @@ public class AclObjectIdentity {
     private AclEntry aclEntry;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_sid")
     private AclSid aclSid;
 
     @ManyToOne(fetch = FetchType.LAZY)

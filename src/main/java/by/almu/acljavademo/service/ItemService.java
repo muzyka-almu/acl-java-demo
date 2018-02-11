@@ -22,7 +22,7 @@ public class ItemService {
         return itemDao.findOne(id);
     }
 
-    @PreAuthorize("hasPermission(returnObject, 'READ')")
+    @PostAuthorize("hasPermission(returnObject, 'READ')")
     public Item getByIdRead(Long id) {
         return itemDao.findOne(id);
     }

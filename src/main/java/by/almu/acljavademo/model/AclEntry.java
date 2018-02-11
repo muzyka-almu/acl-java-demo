@@ -9,10 +9,12 @@ public class AclEntry {
     private Long id;
     private Integer mask;
     private Boolean granting;
-    private Integer aclOrder;
+    private Integer aceOrder;
+    private Boolean auditSuccess;
+    private Boolean auditFailure;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "acl_sid")
+    @JoinColumn(name = "sid")
     private AclSid aclSid;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "acl_object_identity")

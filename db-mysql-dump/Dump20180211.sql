@@ -48,16 +48,18 @@ DROP TABLE IF EXISTS `acl_entry`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `acl_entry` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `acl_order` int(11) DEFAULT NULL,
+  `ace_order` int(11) DEFAULT NULL,
+  `audit_failure` bit(1) DEFAULT NULL,
+  `audit_success` bit(1) DEFAULT NULL,
   `granting` bit(1) DEFAULT NULL,
   `mask` int(11) DEFAULT NULL,
   `acl_object_identity` bigint(20) DEFAULT NULL,
-  `acl_sid` bigint(20) DEFAULT NULL,
+  `sid` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKl39t1oqikardwghegxe0wdcpt` (`acl_object_identity`),
-  KEY `FKojul1v4pdvs8ohc6b67vpk5ni` (`acl_sid`),
-  CONSTRAINT `FKl39t1oqikardwghegxe0wdcpt` FOREIGN KEY (`acl_object_identity`) REFERENCES `acl_object_identity` (`id`),
-  CONSTRAINT `FKojul1v4pdvs8ohc6b67vpk5ni` FOREIGN KEY (`acl_sid`) REFERENCES `acl_sid` (`id`)
+  KEY `FK9r4mj8ewa904g3wivff0tb5b0` (`sid`),
+  CONSTRAINT `FK9r4mj8ewa904g3wivff0tb5b0` FOREIGN KEY (`sid`) REFERENCES `acl_sid` (`id`),
+  CONSTRAINT `FKl39t1oqikardwghegxe0wdcpt` FOREIGN KEY (`acl_object_identity`) REFERENCES `acl_object_identity` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -67,7 +69,7 @@ CREATE TABLE `acl_entry` (
 
 LOCK TABLES `acl_entry` WRITE;
 /*!40000 ALTER TABLE `acl_entry` DISABLE KEYS */;
-INSERT INTO `acl_entry` VALUES (1,1,'',0,1,1),(2,2,'',1,1,1),(3,3,'',2,1,1),(4,4,'',3,1,1);
+INSERT INTO `acl_entry` VALUES (1,1,'\0','\0','',0,1,1),(2,2,'\0','\0','',1,1,1),(3,3,'\0','\0','',2,1,1),(4,4,'\0','\0','',3,1,1);
 /*!40000 ALTER TABLE `acl_entry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,17 +85,17 @@ CREATE TABLE `acl_object_identity` (
   `entries_inheriting` bit(1) DEFAULT NULL,
   `object_id_class` bigint(20) DEFAULT NULL,
   `parent_object` bigint(20) DEFAULT NULL,
-  `owner_id` bigint(20) DEFAULT NULL,
+  `owner_sid` bigint(20) DEFAULT NULL,
   `object_id_identity` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKc06nv93ck19el45a3g1p0e58w` (`object_id_class`),
   KEY `FK4soxn7uid8qxltqps8kewftx7` (`parent_object`),
-  KEY `FKt883fsl8ouhqyb4ola7kvir2b` (`owner_id`),
+  KEY `FKikrbtok3aqlrp9wbq6slh9mcw` (`owner_sid`),
   KEY `FKpyo1q4n1bvgdqwmf1vhilnyy5` (`object_id_identity`),
   CONSTRAINT `FK4soxn7uid8qxltqps8kewftx7` FOREIGN KEY (`parent_object`) REFERENCES `acl_object_identity` (`id`),
   CONSTRAINT `FKc06nv93ck19el45a3g1p0e58w` FOREIGN KEY (`object_id_class`) REFERENCES `acl_class` (`id`),
-  CONSTRAINT `FKpyo1q4n1bvgdqwmf1vhilnyy5` FOREIGN KEY (`object_id_identity`) REFERENCES `item` (`id`),
-  CONSTRAINT `FKt883fsl8ouhqyb4ola7kvir2b` FOREIGN KEY (`owner_id`) REFERENCES `acl_sid` (`id`)
+  CONSTRAINT `FKikrbtok3aqlrp9wbq6slh9mcw` FOREIGN KEY (`owner_sid`) REFERENCES `acl_sid` (`id`),
+  CONSTRAINT `FKpyo1q4n1bvgdqwmf1vhilnyy5` FOREIGN KEY (`object_id_identity`) REFERENCES `item` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,7 +130,7 @@ CREATE TABLE `acl_sid` (
 
 LOCK TABLES `acl_sid` WRITE;
 /*!40000 ALTER TABLE `acl_sid` DISABLE KEYS */;
-INSERT INTO `acl_sid` VALUES (1,'','ROLE_ADMIN'),(2,'','ROLE_USER');
+INSERT INTO `acl_sid` VALUES (1,'\0','ROLE_ADMIN'),(2,'\0','ROLE_USER');
 /*!40000 ALTER TABLE `acl_sid` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,4 +221,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-05 22:29:42
+-- Dump completed on 2018-02-11 21:59:27

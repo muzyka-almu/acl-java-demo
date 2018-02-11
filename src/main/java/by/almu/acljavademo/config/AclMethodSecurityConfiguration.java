@@ -46,10 +46,14 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
     @Bean
     public MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        AclPermissionEvaluator permissionEvaluator = new AclPermissionEvaluator(aclService());
-        expressionHandler.setPermissionEvaluator(permissionEvaluator);
+        expressionHandler.setPermissionEvaluator(aclPermissionEvaluator());
 
         return expressionHandler;
+    }
+
+    @Bean
+    public AclPermissionEvaluator aclPermissionEvaluator() {
+        return new AclPermissionEvaluator(aclService());
     }
 
     @Bean
